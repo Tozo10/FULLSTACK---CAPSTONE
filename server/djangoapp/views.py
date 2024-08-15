@@ -1,12 +1,12 @@
 # Uncomment the required imports before adding the code
 
 from django.shortcuts import render
-#from django.http import HttpResponseRedirect, HttpResponse
+# from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
-#from django.shortcuts import get_object_or_404, redirect
+# from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import logout
-#from django.contrib import messages
-#from datetime import datetime
+# from django.contrib import messages
+# from datetime import datetime
 
 from django.http import JsonResponse
 from django.contrib.auth import login, authenticate
@@ -52,7 +52,7 @@ def logout_request(request):
 # Create a `registration` view to handle sign up request
 @csrf_exempt
 def registration(request):
-    #context = {}
+    # context = {}
     data = json.loads(request.body)
     username = data["userName"]
     password = data["password"]
@@ -97,7 +97,7 @@ def get_cars(request):
     cars = []
     for car_model in car_models:
         cars.append({"CarModel": car_model.name,
-        "CarMake": car_model.car_make.name})
+                     "CarMake": car_model.car_make.name})
     return JsonResponse({"CarModels": cars})
 
 
@@ -145,11 +145,11 @@ def add_review(request):
             return JsonResponse({"status": 200})
         except Exception as e:
             print(f"Error: {e}")
-            return JsonResponse({"status": 401, 
-            "message": "Error in posting review"})
+            return JsonResponse({"status": 401,
+                                 "message": "Error in posting review"})
     else:
-        return JsonResponse({"status": 403, 
-        "message": "Unauthorized"})
+        return JsonResponse({"status": 403,
+                             "message": "Unauthorized"})
 
 
 # ...
