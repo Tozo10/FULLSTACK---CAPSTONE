@@ -13,7 +13,8 @@ class CarMakeAdmin(admin.ModelAdmin):
         (
             "Additional Information",
             {
-                "fields": ("country_of_origin", "established_date", "logo", "website"),
+                "fields": ("country_of_origin",
+                "established_date", "logo", "website"),
                 "classes": ("collapse",),
             },
         ),
