@@ -28,12 +28,14 @@ jobs:
         flake8 . # Runs the linter after formatting
 
     - name: Commit and Push Changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_PAT }}
       run: |
         git config --local user.name "GitHub Actions"
         git config --local user.email "actions@github.com"
         git add .
         git commit -m "Auto-format code"
-        git push origin ${{ github.ref }}
+        git push https://${{ secrets.ACTIONS_PAT }}@github.com/${{ github.repository }}.git ${{ github.ref }}
 
   lint_js:
     name: Lint and Format JavaScript Files
@@ -55,9 +57,11 @@ jobs:
         prettier --write "**/*.js"  # Automatically formats the code
 
     - name: Commit and Push Changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_PAT }}
       run: |
         git config --local user.name "GitHub Actions"
         git config --local user.email "actions@github.com"
         git add .
         git commit -m "Auto-format JS code"
-        git push origin ${{ github.ref }}
+        git push https://${{ secrets.ACTIONS_PAT }}@github.com/${{ github.repository }}.git ${{ github.ref }}
