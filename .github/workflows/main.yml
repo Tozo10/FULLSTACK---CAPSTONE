@@ -1,4 +1,4 @@
-name: 'Lint Code'
+name: 'Lint and Format Code'
 on:
   push:
     branches: [master, main]
@@ -6,7 +6,7 @@ on:
     branches: [master, main]
 jobs:
   lint_python:
-    name: Lint Python Files
+    name: Lint and Format Python Files
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
@@ -16,32 +16,48 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: 3.12
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8
-    - name: Print working directory
-      run: pwd
-    - name: Run Linter
+        pip install black flake8
+
+    - name: Run Formatter and Linter
       run: |
-        pwd
-        # This command finds all Python files recursively and runs flake8 on them
-        find . -name "*.py" -exec flake8 {} +
-        echo "Linted all the python files successfully"
+        black .  # Automatically formats the code
+        flake8 . # Runs the linter after formatting
+
+    - name: Commit and Push Changes
+      run: |
+        git config --local user.name "GitHub Actions"
+        git config --local user.email "actions@github.com"
+        git add .
+        git commit -m "Auto-format code"
+        git push origin ${{ github.ref }}
+
   lint_js:
-      name: Lint JavaScript Files
-      runs-on: ubuntu-latest
-      steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14
-      - name: Install JSHint
-        run: npm install jshint --global
-      - name: Run Linter
-        run: |
-          # This command finds all JavaScript files recursively and runs JSHint on them
-          find ./server/database -name "*.js" -exec jshint {} +
-          echo "Linted all the js files successfully"
+    name: Lint and Format JavaScript Files
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+
+    - name: Install Prettier
+      run: npm install prettier --global
+
+    - name: Run Formatter
+      run: |
+        prettier --write "**/*.js"  # Automatically formats the code
+
+    - name: Commit and Push Changes
+      run: |
+        git config --local user.name "GitHub Actions"
+        git config --local user.email "actions@github.com"
+        git add .
+        git commit -m "Auto-format JS code"
+        git push origin ${{ github.ref }}
